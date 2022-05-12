@@ -1,0 +1,50 @@
+﻿@page "/Index"
+@inject IPersonalIDRepository personalIdRepository
+<PageTitle>Caching Example</PageTitle>
+
+<div id="PersonalInfo">
+    <table class="table table-bordered"> 
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Surname</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if(PersonalList != null)
+        {
+            @foreach(var person in PersonalList)
+            {
+                <tr>
+                    <td>@person.FirstName</td>
+                    <td>@person.LastName</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <h3 class="text-primary">Loading...</h3>
+        }
+        </tbody>
+    </table>
+</div>
+
+@code{
+    public List<PersonalID> PersonalList;
+
+    //protected override void OnInitialized()
+    //{
+    //    PersonalList = personalIdRepository.getPersonalId();
+    //}
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    PersonalList = await personalIdRepository.getPersonalIdAsync();
+    //}
+
+    protected override async Task OnInitializedAsync()
+    {
+        PersonalList = await personalIdRepository.getPersonalIdCached();
+    }
+}
+
